@@ -6,6 +6,10 @@ const commands = [
     name: 'hello',
     description: 'Replies with a friendly greeting',
   },
+  {
+    name: 'whitelistchannel',
+    description: 'Start listening for minecraft usernames in this channel',
+  },
 ];
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
