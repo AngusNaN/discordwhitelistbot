@@ -10,3 +10,10 @@ services:
       - RCON_HOST=folia
       - RCON_PORT=25575
       - RCON_PASSWORD=${RCON_PASSWORD}
+    external_links:
+      - folia
+
+networks:
+  default:
+    external: true
+    name: winter25-folia-gqcqwv_default
