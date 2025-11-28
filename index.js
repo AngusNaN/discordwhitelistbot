@@ -56,7 +56,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
         await rcon.end();
         
         await interaction.reply({ 
-          content: `✅ ${username} wurde zur Whitelist hinzugefügt!\nServer: ${response}`, 
+          content: `✅ ${username} wurde zur Whitelist hinzugefügt!\n⚙️ Server: ${response}`, 
           ephemeral: true 
         });
       } catch (error) {
