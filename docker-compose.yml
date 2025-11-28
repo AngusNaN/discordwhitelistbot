@@ -7,12 +7,13 @@ services:
     environment:
       - DISCORD_TOKEN=${DISCORD_TOKEN}
       - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
-    env_file:
-      - .env
+      - RCON_HOST=folia
+      - RCON_PORT=25575
+      - RCON_PASSWORD=${RCON_PASSWORD}
     networks:
-      - minecraft-network
+      - default
 
 networks:
-  minecraft-network:
+  default:
+    name: winter25_default
     external: true
-    name: <project-name>_default
