@@ -54,7 +54,22 @@ client.on(Events.InteractionCreate, async (interaction) => {
         
         const response = await rcon.send(`whitelist add ${username}`);
         await rcon.end();
+
+        // Add the role after successful whitelist
+        const serverRoles = {
+          'server_a_id': process.env.WHITELISTED_ROLE_STREAMER_A,
+          'server_b_id': process.env.WHITELISTED_ROLE_STREAMER_B,
+          'server_c_id': process.env.WHITELISTED_ROLE_STREAMER_C,
+        };
         
+        const roleId = serverRoles[interaction.guildId];
+        await interaction.member.roles.add(roleId);
+        
+        await interaction.reply({ 
+          content: `✅ ${username} wurde zur Whitelist hinzugefügt!`, 
+          ephemeral: true 
+        });
+
         await interaction.reply({ 
           content: `✅ ${username} wurde zur Whitelist hinzugefügt!\n⚙️ Server: ${response}`, 
           ephemeral: false
@@ -77,25 +92,43 @@ client.on(Events.InteractionCreate, async (interaction) => {
     await interaction.reply(`Hello ${interaction.user.username}! 👋`);
   }
 
-  if (interaction.commandName === 'whitelist') {
-    const modal = new ModalBuilder()
-      .setCustomId('whitelist-modal')
-      .setTitle('Minecraft Whitelist');
-    
-    const usernameInput = new TextInputBuilder()
-      .setCustomId('minecraft-username')
-      .setLabel('Minecraft Username')
-      .setStyle(TextInputStyle.Short)
-      .setPlaceholder('Gebe deinen Minecraft-Namen hier ein')
-      .setRequired(true)
-      .setMinLength(3)
-      .setMaxLength(16);
-    
-    const row = new ActionRowBuilder().addComponents(usernameInput);
-    modal.addComponents(row);
-    
-    await interaction.showModal(modal);
+if (interaction.commandName === 'whitelist') {
+  const serverRoles = {
+    'server_a_id': process.env.WHITELISTED_ROLE_STREAMER_A,
+    'server_b_id': process.env.WHITELISTED_ROLE_STREAMER_B,
+    'server_c_id': process.env.WHITELISTED_ROLE_STREAMER_C,
+  };
+  
+  const roleId = serverRoles[interaction.guildId];
+  
+  // Check if they already have the role
+  if (interaction.member.roles.cache.has(roleId)) {
+    await interaction.reply({
+      content: '❌ Du hast bereits einen Account gewhitelisted',
+      ephemeral: true
+    });
+    return;  // Stop here, don't show modal
   }
-});
+  
+  // Only show modal if they don't have the role yet
+  const modal = new ModalBuilder()
+    .setCustomId('whitelist-modal')
+    .setTitle('Minecraft Whitelist');
+  
+  const usernameInput = new TextInputBuilder()
+    .setCustomId('minecraft-username')
+    .setLabel('Minecraft Username')
+    .setStyle(TextInputStyle.Short)
+    .setPlaceholder('Gebe deinen Minecraft-Namen hier ein')
+    .setRequired(true)
+    .setMinLength(3)
+    .setMaxLength(16);
+  
+  const row = new ActionRowBuilder().addComponents(usernameInput);
+  modal.addComponents(row);
+  
+  await interaction.showModal(modal);
+
+}});
 
 client.login(process.env.DISCORD_TOKEN);
