@@ -9,3 +9,10 @@ services:
       - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
     env_file:
       - .env
+    networks:
+      - minecraft-network
+
+networks:
+  minecraft-network:
+    external: true
+    name: <project-name>_default
