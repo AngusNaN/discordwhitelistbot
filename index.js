@@ -132,8 +132,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
     console.log('modal was built')
     await interaction.showModal(modal);
   }
-  }
-);
-
+});
 
 client.login(process.env.DISCORD_TOKEN);
