@@ -100,7 +100,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
           });
         }
       return;
-  }
+      }
+    }
 
   // Handle slash commands
   if (!interaction.isChatInputCommand()) {
