@@ -76,7 +76,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       } catch (error) {
         console.error('RCON error:', error);
         await interaction.reply({
-          content: '❌ Failed to connect to server',
+          content: '❌ Verbindung zum Server fehlgeschlagen. Schlag Angus',
           ephemeral: true
         });
       }
@@ -93,9 +93,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
 if (interaction.commandName === 'whitelist') {
   const serverRoles = {
-    'server_a_id': process.env.WHITELISTED_ROLE_STREAMER_A,
-    'server_b_id': process.env.WHITELISTED_ROLE_STREAMER_B,
-    'server_c_id': process.env.WHITELISTED_ROLE_STREAMER_C,
+    [process.env.SERVERID_JESSY]: process.env.ROLEID_JESSY,
+    [process.env.SERVERID_MALLE]: process.env.ROLEID_MALLE,
+    [process.env.SERVERID_BOOMII]: process.env.ROLEID_BOOMII,
   };
   
   const roleId = serverRoles[interaction.guildId];
