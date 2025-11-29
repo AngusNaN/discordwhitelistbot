@@ -128,6 +128,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
       modal.addComponents(row);
       
       await interaction.showModal(modal);
-    };
+    }
+  }
+});
 
 client.login(process.env.DISCORD_TOKEN);
