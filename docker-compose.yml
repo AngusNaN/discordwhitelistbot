@@ -10,9 +10,14 @@ services:
       - RCON_HOST=172.19.0.2
       - RCON_PORT=25575
       - RCON_PASSWORD=${RCON_PASSWORD}
+      - SERVERID_JESSY=${SERVERID_JESSY}
+      - ROLEID_JESSY=${ROLEID_JESSY}
+      - SERVERID_MALLE=${SERVERID_MALLE}
+      - ROLEID_MALLE=${ROLEID_MALLE}
+      - SERVERID_BOOMII=${SERVERID_BOOMII}
+      - ROLEID_BOOMII=${ROLEID_BOOMII}
     external_links:
       - folia
-
 networks:
   default:
     external: true
