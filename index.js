@@ -63,6 +63,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
         };
         
         const roleId = serverRoles[interaction.guildId];
+
+        console.log('Guild ID:', interaction.guildId);
+        console.log('Server Roles:', serverRoles);
+        console.log('Role ID:', roleId);
+        
         await interaction.member.roles.add(roleId);
         
         await interaction.reply({ 
