@@ -43,6 +43,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
             color: 'White',
             reason: '✅ Automatisch erstellte rolle für whitelisting (Morningstar)'
           });
+          console.log('❌❌❌ ', 'Missing Role. Role Created!');
         } catch (error) {
           await interaction.reply({
             content: '❌ Erstellen der Rolle fehlgeschlagen. Überprüfe die permissions!',
@@ -59,38 +60,39 @@ client.on(Events.InteractionCreate, async (interaction) => {
           content: '❌ Username ungültig!', 
           ephemeral: true 
         });
+        console.log('❌❌❌ ', '❌ Username ungültig!');
         return;
       }
       if (interaction.member.roles.cache.has(role)) {
-        console.log('❌❌❌ ', 'has role')
+        console.log('❌❌❌ ', 'has role, whitelist denied')
         await interaction.reply({
         content: '❌ Du hast bereits einen Account gewhitelisted',
         ephemeral: true
       });
       try {
-          const rcon = await Rcon.connect({
-            host: process.env.RCON_HOST,
-            port: parseInt(process.env.RCON_PORT),
-            password: process.env.RCON_PASSWORD
-          });
-          
-          const response = await rcon.send(`whitelist add ${username}`);
-          console.log('❌❌❌ ', `${username} added to whitelist`);
-          await rcon.end();
+        const rcon = await Rcon.connect({
+          host: process.env.RCON_HOST,
+          port: parseInt(process.env.RCON_PORT),
+          password: process.env.RCON_PASSWORD
+        });
+        
+        const response = await rcon.send(`whitelist add ${username}`);
+        console.log('❌❌❌ ', `${username} added to whitelist`);
+        await rcon.end();
 
-          // Add the role after successful whitelist
-          await interaction.member.roles.add(role);
-          await interaction.reply({ 
-            content: `✅ ${username} wurde zur Whitelist hinzugefügt!\n⚙️ Server: ${response}`, 
-            ephemeral: false
-          });
-        } catch (error) {
-          console.error('RCON error:', error);
-          await interaction.reply({
-            content: '❌ Verbindung zum Server fehlgeschlagen. Schlag Angus',
-            ephemeral: true
-          });
-        }
+        // Add the role after successful whitelist
+        await interaction.member.roles.add(role);
+        await interaction.reply({ 
+          content: `✅ ${username} wurde zur Whitelist hinzugefügt!\n⚙️ Server: ${response}`, 
+          ephemeral: false
+        });
+      } catch (error) {
+        console.error('RCON error:', error);
+        await interaction.reply({
+          content: '❌ Verbindung zum Server fehlgeschlagen. Schlag Angus',
+          ephemeral: true
+        });
+      }
       return;
       }
     }
