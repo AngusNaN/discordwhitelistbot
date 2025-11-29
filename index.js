@@ -102,40 +102,38 @@ client.on(Events.InteractionCreate, async (interaction) => {
       return;
       }
     }
-
+  }
   // Handle slash commands
   if (!interaction.isChatInputCommand()) {
-    console.log('Returned.')
-    return 
-    } else {
+    console.log('Command: ', interaction.commandName, interaction.user)
+    return;
+  }
+  if (interaction.commandName === 'hello') {
+    await interaction.reply(`Hello ${interaction.user.username}! 👋`);
+  }
 
-      if (interaction.commandName === 'hello') {
-        await interaction.reply(`Hello ${interaction.user.username}! 👋`);
-      }
-
-      if (interaction.commandName === 'whitelist') {
-        console.log('User used a command!')
-        const modal = new ModalBuilder()
-          .setCustomId('whitelist-modal')
-          .setTitle('Minecraft Whitelist');
-        
-        const usernameInput = new TextInputBuilder()
-          .setCustomId('minecraft-username')
-          .setLabel('Minecraft Username')
-          .setStyle(TextInputStyle.Short)
-          .setPlaceholder('Gebe deinen Minecraft-Namen hier ein')
-          .setRequired(true)
-          .setMinLength(3)
-          .setMaxLength(16);
-        
-        const row = new ActionRowBuilder().addComponents(usernameInput);
-        modal.addComponents(row);
-        console.log('modal was built')
-        await interaction.showModal(modal);
-      }
-    }
-  };
-});
+  if (interaction.commandName === 'whitelist') {
+    console.log('User used a command!')
+    const modal = new ModalBuilder()
+      .setCustomId('whitelist-modal')
+      .setTitle('Minecraft Whitelist');
+    
+    const usernameInput = new TextInputBuilder()
+      .setCustomId('minecraft-username')
+      .setLabel('Minecraft Username')
+      .setStyle(TextInputStyle.Short)
+      .setPlaceholder('Gebe deinen Minecraft-Namen hier ein')
+      .setRequired(true)
+      .setMinLength(3)
+      .setMaxLength(16);
+    
+    const row = new ActionRowBuilder().addComponents(usernameInput);
+    modal.addComponents(row);
+    console.log('modal was built')
+    await interaction.showModal(modal);
+  }
+  }
+);
 
 
 client.login(process.env.DISCORD_TOKEN);
