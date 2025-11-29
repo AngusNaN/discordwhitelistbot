@@ -110,7 +110,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     }
 
     if (interaction.commandName === 'whitelist') {
-
+      console.log('User used a command!')
       const modal = new ModalBuilder()
         .setCustomId('whitelist-modal')
         .setTitle('Minecraft Whitelist');
@@ -126,7 +126,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       
       const row = new ActionRowBuilder().addComponents(usernameInput);
       modal.addComponents(row);
-      
+      console.log('modal was built')
       await interaction.showModal(modal);
     }
   }
