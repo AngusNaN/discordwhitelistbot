@@ -103,7 +103,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
 
   // Handle slash commands
-  if (!interaction.isChatInputCommand()) { 
+  if (!interaction.isChatInputCommand()) {
+    console.log('Returned.')
     return 
     } else {
 
