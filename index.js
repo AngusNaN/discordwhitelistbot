@@ -45,8 +45,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
         } catch (error) {
           await interaction.reply({
             content: '❌ Erstellen der Rolle fehlgeschlagen. Überprüfe die permissions!',
-            ephemeral: true});
-          }
+            ephemeral: true
+          });
         }
       }
       const username = interaction.fields.getTextInputValue('minecraft-username');
@@ -134,6 +134,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
         await interaction.showModal(modal);
       }
     }
-  });
+  };
+});
+
 
 client.login(process.env.DISCORD_TOKEN);
