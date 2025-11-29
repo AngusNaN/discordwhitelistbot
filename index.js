@@ -10,7 +10,7 @@ const client = new Client({
 });
 
 client.once(Events.ClientReady, (c) => {
-  console.log(`✅ Bot is online as ${c.user.tag}`);
+  console.log('❌❌❌ ', `✅ Bot is online as ${c.user.tag}`);
 });
 
 client.on(Events.MessageCreate, async (message) => {
@@ -30,11 +30,11 @@ client.on(Events.MessageCreate, async (message) => {
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
-  console.log('Interaction recieved');
+  console.log('❌❌❌ ', 'Interaction recieved');
   if (interaction.isModalSubmit()) {
     if (interaction.customId === 'whitelist-modal') {
       let role = interaction.guild.roles.cache.find(r => r.name === "Whitelisted");
-
+      console.log('❌❌❌ ', 'let role dings')
       if (!role) {
         try {
           role = await interaction.guild.roles.create({
@@ -47,6 +47,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
             content: '❌ Erstellen der Rolle fehlgeschlagen. Überprüfe die permissions!',
             ephemeral: true
           });
+          console.log('❌❌❌ ', 'permission error')
         }
       }
       const username = interaction.fields.getTextInputValue('minecraft-username');
@@ -83,9 +84,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
           
           const roleId = serverRoles[interaction.guildId];
 
-          console.log('Guild ID:', interaction.guildId);
-          console.log('Server Roles:', serverRoles);
-          console.log('Role ID:', roleId);
+          console.log('❌❌❌ ', 'Guild ID:', interaction.guildId);
+          console.log('❌❌❌ ', 'Server Roles:', serverRoles);
+          console.log('❌❌❌ ', 'Role ID:', roleId);
 
           await interaction.member.roles.add(roleId);
           await interaction.reply({ 
@@ -105,7 +106,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
   // Handle slash commands
   if (!interaction.isChatInputCommand()) {
-    console.log('Command: ', interaction.commandName, interaction.user)
+    console.log('❌❌❌ ', 'Command: ', interaction.commandName, interaction.user.username)
     return;
   }
   if (interaction.commandName === 'hello') {
@@ -113,7 +114,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
 
   if (interaction.commandName === 'whitelist') {
-    console.log('User used a command!')
+    console.log('❌❌❌ ', 'User used a command!')
     const modal = new ModalBuilder()
       .setCustomId('whitelist-modal')
       .setTitle('Minecraft Whitelist');
@@ -129,8 +130,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
     
     const row = new ActionRowBuilder().addComponents(usernameInput);
     modal.addComponents(row);
-    console.log('modal was built')
     await interaction.showModal(modal);
+    console.log('❌❌❌ ', 'modal was shown')
   }
 });
 
