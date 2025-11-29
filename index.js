@@ -1,5 +1,5 @@
-const { Client, GatewayIntentBits, Events, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = require('discord.js');
-const { Rcon } = require('rcon-client');
+const { Client, GatewayIntentBits, Events, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = import('discord.js');
+const { Rcon } = import('rcon-client');
 
 const client = new Client({
   intents: [
