@@ -30,7 +30,7 @@ client.on(Events.MessageCreate, async (message) => {
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
-
+  console.log('Interaction recieved');
   if (interaction.isModalSubmit()) {
     if (interaction.customId === 'whitelist-modal') {
       let role = interaction.guild.roles.cache.find(r => r.name === "Whitelisted");
