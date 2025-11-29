@@ -31,12 +31,14 @@ client.on(Events.MessageCreate, async (message) => {
 
 client.on(Events.InteractionCreate, async (interaction) => {
   console.log('❌❌❌ ', 'Interaction recieved');
+  
   if (interaction.isModalSubmit()) {
     if (interaction.customId === 'whitelist-modal') {
       let role = interaction.guild.roles.cache.find(r => r.name === "Whitelisted");
-      console.log('❌❌❌ ', 'let role dings')
+      console.log('❌❌❌ ', 'let role dings');
+      
       if (!role) {
-        console.log('❌❌❌ ', '!role')
+        console.log('❌❌❌ ', '!role');
         try {
           role = await interaction.guild.roles.create({
             name: 'Whitelisted',
@@ -49,12 +51,14 @@ client.on(Events.InteractionCreate, async (interaction) => {
             content: '❌ Erstellen der Rolle fehlgeschlagen. Überprüfe die permissions!',
             ephemeral: true
           });
-          console.log('❌❌❌ ', 'permission error')
+          console.log('❌❌❌ ', 'permission error');
+          return;
         }
       }
+      
       const username = interaction.fields.getTextInputValue('minecraft-username');
       const isValid = /^[a-zA-Z0-9_]{3,16}$/.test(username);
-    
+      
       if (!isValid) {
         await interaction.reply({ 
           content: '❌ Username ungültig!', 
@@ -63,12 +67,16 @@ client.on(Events.InteractionCreate, async (interaction) => {
         console.log('❌❌❌ ', '❌ Username ungültig!');
         return;
       }
-      if (interaction.member.roles.cache.has(role)) {
-        console.log('❌❌❌ ', 'has role, whitelist denied')
+      
+      if (interaction.member.roles.cache.has(role.id)) {
+        console.log('❌❌❌ ', 'has role, whitelist denied');
         await interaction.reply({
-        content: '❌ Du hast bereits einen Account gewhitelisted',
-        ephemeral: true
-      });
+          content: '❌ Du hast bereits einen Account gewhitelisted',
+          ephemeral: true
+        });
+        return;
+      }
+      
       try {
         const rcon = await Rcon.connect({
           host: process.env.RCON_HOST,
@@ -94,20 +102,21 @@ client.on(Events.InteractionCreate, async (interaction) => {
         });
       }
       return;
-      }
     }
   }
+  
   // Handle slash commands
   if (!interaction.isChatInputCommand()) {
-    console.log('❌❌❌ ', 'Command: ', interaction.commandName, interaction.user.username)
+    console.log('❌❌❌ ', 'Command: ', interaction.commandName, interaction.user.username);
     return;
   }
+  
   if (interaction.commandName === 'hello') {
     await interaction.reply(`Hello ${interaction.user.username}! 👋`);
   }
 
   if (interaction.commandName === 'whitelist') {
-    console.log('❌❌❌ ', 'User used a command!')
+    console.log('❌❌❌ ', 'User used a command!');
     const modal = new ModalBuilder()
       .setCustomId('whitelist-modal')
       .setTitle('Minecraft Whitelist');
@@ -124,7 +133,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     const row = new ActionRowBuilder().addComponents(usernameInput);
     modal.addComponents(row);
     await interaction.showModal(modal);
-    console.log('❌❌❌ ', 'modal was shown')
+    console.log('❌❌❌ ', 'modal was shown');
   }
 });
 
