@@ -67,14 +67,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
         console.log('Guild ID:', interaction.guildId);
         console.log('Server Roles:', serverRoles);
         console.log('Role ID:', roleId);
-        
-        await interaction.member.roles.add(roleId);
-        
-        await interaction.reply({ 
-          content: `✅ ${username} wurde zur Whitelist hinzugefügt!`, 
-          ephemeral: true 
-        });
 
+        await interaction.member.roles.add(roleId);
         await interaction.reply({ 
           content: `✅ ${username} wurde zur Whitelist hinzugefügt!\n⚙️ Server: ${response}`, 
           ephemeral: false
