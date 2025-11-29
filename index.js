@@ -109,28 +109,28 @@ client.on(Events.InteractionCreate, async (interaction) => {
   if (interaction.commandName === 'hello') {
     await interaction.reply(`Hello ${interaction.user.username}! 👋`);
   }
-});
+  });
 
-if (interaction.commandName === 'whitelist') {
+  if (interaction.commandName === 'whitelist') {
 
-  const modal = new ModalBuilder()
-    .setCustomId('whitelist-modal')
-    .setTitle('Minecraft Whitelist');
-  
-  const usernameInput = new TextInputBuilder()
-    .setCustomId('minecraft-username')
-    .setLabel('Minecraft Username')
-    .setStyle(TextInputStyle.Short)
-    .setPlaceholder('Gebe deinen Minecraft-Namen hier ein')
-    .setRequired(true)
-    .setMinLength(3)
-    .setMaxLength(16);
-  
-  const row = new ActionRowBuilder().addComponents(usernameInput);
-  modal.addComponents(row);
-  
-  await interaction.showModal(modal);
+    const modal = new ModalBuilder()
+      .setCustomId('whitelist-modal')
+      .setTitle('Minecraft Whitelist');
+    
+    const usernameInput = new TextInputBuilder()
+      .setCustomId('minecraft-username')
+      .setLabel('Minecraft Username')
+      .setStyle(TextInputStyle.Short)
+      .setPlaceholder('Gebe deinen Minecraft-Namen hier ein')
+      .setRequired(true)
+      .setMinLength(3)
+      .setMaxLength(16);
+    
+    const row = new ActionRowBuilder().addComponents(usernameInput);
+    modal.addComponents(row);
+    
+    await interaction.showModal(modal);
 
-};
+  };
 
 client.login(process.env.DISCORD_TOKEN);
