@@ -134,7 +134,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
         await interaction.showModal(modal);
       }
     }
-  }
-});
+  });
 
 client.login(process.env.DISCORD_TOKEN);
