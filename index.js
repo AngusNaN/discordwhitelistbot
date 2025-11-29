@@ -57,9 +57,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
         // Add the role after successful whitelist
         const serverRoles = {
-          'server_a_id': process.env.WHITELISTED_ROLE_STREAMER_A,
-          'server_b_id': process.env.WHITELISTED_ROLE_STREAMER_B,
-          'server_c_id': process.env.WHITELISTED_ROLE_STREAMER_C,
+          [process.env.SERVERID_JESSY]: process.env.ROLEID_JESSY,
+          [process.env.SERVERID_MALLE]: process.env.ROLEID_MALLE,
+          [process.env.SERVERID_BOOMII]: process.env.ROLEID_BOOMII,
         };
         
         const roleId = serverRoles[interaction.guildId];
