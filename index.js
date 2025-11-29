@@ -36,6 +36,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       let role = interaction.guild.roles.cache.find(r => r.name === "Whitelisted");
       console.log('❌❌❌ ', 'let role dings')
       if (!role) {
+        console.log('❌❌❌ ', '!role')
         try {
           role = await interaction.guild.roles.create({
             name: 'Whitelisted',
@@ -60,7 +61,8 @@ client.on(Events.InteractionCreate, async (interaction) => {
         });
         return;
       }
-      if (interaction.member.roles.cache.has(role.id)) {
+      if (interaction.member.roles.cache.has(role)) {
+        console.log('❌❌❌ ', 'has role')
         await interaction.reply({
         content: '❌ Du hast bereits einen Account gewhitelisted',
         ephemeral: true
@@ -73,22 +75,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
           });
           
           const response = await rcon.send(`whitelist add ${username}`);
+          console.log('❌❌❌ ', `${username} added to whitelist`);
           await rcon.end();
 
           // Add the role after successful whitelist
-          const serverRoles = {
-            [process.env.SERVERID_JESSY]: process.env.ROLEID_JESSY,
-            [process.env.SERVERID_MALLE]: process.env.ROLEID_MALLE,
-            [process.env.SERVERID_BOOMII]: process.env.ROLEID_BOOMII,
-          };
-          
-          const roleId = serverRoles[interaction.guildId];
-
-          console.log('❌❌❌ ', 'Guild ID:', interaction.guildId);
-          console.log('❌❌❌ ', 'Server Roles:', serverRoles);
-          console.log('❌❌❌ ', 'Role ID:', roleId);
-
-          await interaction.member.roles.add(roleId);
+          await interaction.member.roles.add(role);
           await interaction.reply({ 
             content: `✅ ${username} wurde zur Whitelist hinzugefügt!\n⚙️ Server: ${response}`, 
             ephemeral: false
