@@ -29,23 +29,43 @@ client.on(Events.MessageCreate, async (message) => {
   }
 });
 
-// Slash command and modal handling
 client.on(Events.InteractionCreate, async (interaction) => {
-  // Handle modal submissions FIRST
+
   if (interaction.isModalSubmit()) {
     if (interaction.customId === 'whitelist-modal') {
-      const username = interaction.fields.getTextInputValue('minecraft-username');
-      const isValid = /^[a-zA-Z0-9_]{3,16}$/.test(username);
-      
-      if (!isValid) {
-        await interaction.reply({ 
-          content: '❌ Username ungültig!', 
-          ephemeral: true 
-        });
-        return;
+      let role = interaction.guild.roles.cache.find(r => r.name === "Whitelisted");
+
+      if (!role) {
+        try {
+          role = await interaction.guild.roles.create({
+            name: 'Whitelisted',
+            color: 'White',
+            reason: '✅ Automatisch erstellte rolle für whitelisting (Morningstar)'
+          });
+        } catch (error) {
+          await interaction.reply({
+            content: '❌ Erstellen der Rolle fehlgeschlagen. Überprüfe die permissions!',
+            ephemeral: true});
+          }
+        }
       }
-      
-      try {
+    }
+    const username = interaction.fields.getTextInputValue('minecraft-username');
+    const isValid = /^[a-zA-Z0-9_]{3,16}$/.test(username);
+    
+    if (!isValid) {
+      await interaction.reply({ 
+        content: '❌ Username ungültig!', 
+        ephemeral: true 
+      });
+      return;
+    }
+    if (interaction.member.roles.cache.has(role.id)) {
+      await interaction.reply({
+      content: '❌ Du hast bereits einen Account gewhitelisted',
+      ephemeral: true
+    });
+    try {
         const rcon = await Rcon.connect({
           host: process.env.RCON_HOST,
           port: parseInt(process.env.RCON_PORT),
@@ -80,8 +100,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
           ephemeral: true
         });
       }
-      return;
-    }
+    return;
   }
 
   // Handle slash commands
@@ -90,26 +109,10 @@ client.on(Events.InteractionCreate, async (interaction) => {
   if (interaction.commandName === 'hello') {
     await interaction.reply(`Hello ${interaction.user.username}! 👋`);
   }
+});
 
 if (interaction.commandName === 'whitelist') {
-  const serverRoles = {
-    [process.env.SERVERID_JESSY]: process.env.ROLEID_JESSY,
-    [process.env.SERVERID_MALLE]: process.env.ROLEID_MALLE,
-    [process.env.SERVERID_BOOMII]: process.env.ROLEID_BOOMII,
-  };
-  
-  const roleId = serverRoles[interaction.guildId];
-  
-  // Check if they already have the role
-  if (interaction.member.roles.cache.has(roleId)) {
-    await interaction.reply({
-      content: '❌ Du hast bereits einen Account gewhitelisted',
-      ephemeral: true
-    });
-    return;  // Stop here, don't show modal
-  }
-  
-  // Only show modal if they don't have the role yet
+
   const modal = new ModalBuilder()
     .setCustomId('whitelist-modal')
     .setTitle('Minecraft Whitelist');
@@ -128,6 +131,6 @@ if (interaction.commandName === 'whitelist') {
   
   await interaction.showModal(modal);
 
-}});
+};
 
 client.login(process.env.DISCORD_TOKEN);
