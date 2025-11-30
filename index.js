@@ -83,13 +83,13 @@ client.on(Events.InteractionCreate, async (interaction) => {
         console.log( response )
         if (response.toLowerCase().includes('already whitelisted')) {
           await interaction.reply({
-            content: 'Dieser Username ist bereits auf der Whitelist',
+            content: '❌ Dieser Username ist bereits auf der Whitelist',
             flags: [64] // 64 -- Ephemeral
           });
           return;
         } else if (response.toLowerCase().includes('does not exist')) {
           await interaction.reply({
-            content: 'User nicht gefunden!\nBist du sicher dass der Username richtig ist?',
+            content: '❌ User nicht gefunden!\nBist du sicher dass der Username richtig ist?',
             flags: [64] // 64 -- Ephemeral
           });
           return;
@@ -142,7 +142,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       await interaction.showModal(modal);
     } else {
       await interaction.reply({
-        content: 'Du hast nicht die Nötige Rolle um diesen Command zu nutzen!',
+        content: '❌ Du hast nicht die nötige Rolle um diesen Command zu nutzen!',
         flags: [64] // 64 -- Ephemeral
       });
     }
