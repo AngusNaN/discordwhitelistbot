@@ -121,10 +121,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) {
     return;
   }
-  
-  if (interaction.commandName === 'hello') {
-    await interaction.reply(`Hello ${interaction.user.username}! 👋`);
-  }
 
   if (interaction.commandName === 'whitelist') {
     const modal = new ModalBuilder()
