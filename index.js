@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, Events, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } from 'discord.js';
+import { Client, GatewayIntentBits, Events, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, MessageFlags } from 'discord.js';
 import { Rcon } from 'rcon-client';
 
 const client = new Client({
@@ -46,7 +46,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
         } catch (error) {
           await interaction.reply({
             content: '❌ Erstellen der Rolle fehlgeschlagen. Überprüfe die permissions!',
-            ephemeral: true
+            flags: [64] // 64 -- Ephemeral
           });
           return;
         }
@@ -58,7 +58,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       if (!isValid) {
         await interaction.reply({ 
           content: '❌ Username ungültig!', 
-          ephemeral: true 
+          flags: [64] // 64 -- Ephemeral 
         });
         return;
       }
@@ -66,7 +66,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       if (interaction.member.roles.cache.has(role.id)) {
         await interaction.reply({
           content: '❌ Du hast bereits einen Account gewhitelisted',
-          ephemeral: true
+          flags: [64] // 64 -- Ephemeral
         });
         return;
       }
@@ -82,29 +82,35 @@ client.on(Events.InteractionCreate, async (interaction) => {
         await rcon.end();
         console.log( response )
         if (response.toLowerCase().includes('already whitelisted')) {
-          await interaction.reply({ content: 'Dieser Name ist bereits auf der Whitelist', ephemeral: true });
+          await interaction.reply({
+            content: 'Dieser Username ist bereits auf der Whitelist',
+            flags: [64] // 64 -- Ephemeral
+          });
           return;
         } else if (response.toLowerCase().includes('does not exist')) {
-          await interaction.reply({ content: 'User nicht gefunden, bist du sicher dass der Name richtig ist?', ephemeral: true })
+          await interaction.reply({
+            content: 'User nicht gefunden!\nBist du sicher dass der Username richtig ist?',
+            flags: [64] // 64 -- Ephemeral
+          });
           return;
         } else if (response.toLowerCase().includes('added') && response.toLowerCase().includes('whitelist')) {
           await interaction.member.roles.add(role);
           await interaction.reply({ 
-          content: `✅ ${username} wurde zur Whitelist hinzugefügt!\n⚙️ Server: ${response}`, 
-          ephemeral: false
+          content: `✅ ${username} wurde zur Whitelist hinzugefügt!`, 
+          flags: [4096] // 4096 -- Silent Message
           });
         } else {
           await interaction.reply({ 
           content: `❌ Etwas ist schief gelaufen! Bitte Versuche es in ein paar Minuten erneut!`, 
-          ephemeral: false
+          flags: [64] // 64 -- Ephemeral
           });
           console.log(`❌❌❌ Unusual RCON response \n❌❌❌ Response: ${response}`)
         }
       } catch (error) {
         console.error('RCON error:', error);
         await interaction.reply({
-          content: '❌ Verbindung zum Server fehlgeschlagen. Schlag Angus',
-          ephemeral: true
+          content: '❌ Verbindung zum Server fehlgeschlagen.\nVersuche es in ein paar Minuten erneut oder melde dich beim Server-Team',
+          flags: [64] // 64 -- Ephemeral
         });
       }
       return;
