@@ -80,13 +80,22 @@ client.on(Events.InteractionCreate, async (interaction) => {
         
         const response = await rcon.send(`whitelist add ${username}`);
         await rcon.end();
+        
+        if (response === 'Player is already whitelisted') {
 
-        // Add the role after successful whitelist
-        await interaction.member.roles.add(role);
-        await interaction.reply({ 
+          await interaction.reply({ content: 'Dieser User ist schon auf der Whitelist', ephemeral: true });
+          return;
+        }
+        if (response === 'That player does not exist') {
+          await interaction.reply({ content: 'User nicht gefunden, bist du sicher dass der Name richtig ist?', ephemeral: true })
+        }
+        if (response === `Added ${username} to the whitelist`) {
+          await interaction.member.roles.add(role);
+          await interaction.reply({ 
           content: `✅ ${username} wurde zur Whitelist hinzugefügt!\n⚙️ Server: ${response}`, 
           ephemeral: false
-        });
+          });
+        }
       } catch (error) {
         console.error('RCON error:', error);
         await interaction.reply({
