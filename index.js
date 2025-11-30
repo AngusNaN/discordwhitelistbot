@@ -123,22 +123,29 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
 
   if (interaction.commandName === 'whitelist') {
-    const modal = new ModalBuilder()
-      .setCustomId('whitelist-modal')
-      .setTitle('Minecraft Whitelist');
-    
-    const usernameInput = new TextInputBuilder()
-      .setCustomId('minecraft-username')
-      .setLabel('Minecraft Username')
-      .setStyle(TextInputStyle.Short)
-      .setPlaceholder('Gebe deinen Minecraft-Namen hier ein')
-      .setRequired(true)
-      .setMinLength(3)
-      .setMaxLength(16);
-    
-    const row = new ActionRowBuilder().addComponents(usernameInput);
-    modal.addComponents(row);
-    await interaction.showModal(modal);
+    if (interaction.member.roles.cache.some(role => role.name === 'Twitch Subscriber' )) {
+      const modal = new ModalBuilder()
+        .setCustomId('whitelist-modal')
+        .setTitle('Minecraft Whitelist');
+      
+      const usernameInput = new TextInputBuilder()
+        .setCustomId('minecraft-username')
+        .setLabel('Minecraft Username')
+        .setStyle(TextInputStyle.Short)
+        .setPlaceholder('Gebe deinen Minecraft-Namen hier ein')
+        .setRequired(true)
+        .setMinLength(3)
+        .setMaxLength(16);
+      
+      const row = new ActionRowBuilder().addComponents(usernameInput);
+      modal.addComponents(row);
+      await interaction.showModal(modal);
+    } else {
+      await interaction.response({
+        content: 'Du hast nicht die Nötige Rolle um diesen Command zu nutzen!',
+        flags: [64] // 64 -- Ephemeral
+      });
+    }
   }
 });
 
