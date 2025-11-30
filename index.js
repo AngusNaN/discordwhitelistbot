@@ -141,7 +141,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       modal.addComponents(row);
       await interaction.showModal(modal);
     } else {
-      await interaction.response({
+      await interaction.reply({
         content: 'Du hast nicht die Nötige Rolle um diesen Command zu nutzen!',
         flags: [64] // 64 -- Ephemeral
       });
