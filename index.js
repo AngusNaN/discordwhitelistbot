@@ -51,7 +51,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
           return;
         }
       }
-      
       const username = interaction.fields.getTextInputValue('minecraft-username');
       const isValid = /^[a-zA-Z0-9_]{3,16}$/.test(username);
       
