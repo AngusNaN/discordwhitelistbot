@@ -80,7 +80,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
         
         const response = await rcon.send(`whitelist add ${username}`);
         await rcon.end();
-        
+        console.log( response )
         if (response === 'Player is already whitelisted') {
 
           await interaction.reply({ content: 'Dieser User ist schon auf der Whitelist', ephemeral: true });
