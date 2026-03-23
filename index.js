@@ -10,7 +10,7 @@ const client = new Client({
 });
 
 client.once(Events.ClientReady, (c) => {
-  console.log('❌❌❌ ', `✅ Bot is online as ${c.user.tag}`);
+  console.log(`Bot is online as ${c.user.tag}`);
 });
 
 client.on(Events.MessageCreate, async (message) => {
@@ -19,7 +19,7 @@ client.on(Events.MessageCreate, async (message) => {
 
   // Simple ping command
   if (message.content === '!ping') {
-    await message.reply('Pong! 🏓');
+    await message.reply('Pong!');
   }
 
   // Echo command
@@ -40,12 +40,12 @@ client.on(Events.InteractionCreate, async (interaction) => {
           role = await interaction.guild.roles.create({
             name: 'Whitelisted',
             color: 'White',
-            reason: '✅ Automatisch erstellte rolle für whitelisting (Morningstar)'
+            reason: 'Automatisch erstellte rolle für whitelisting (Morningstar)'
           });
-          console.log('❌❌❌ ', 'Missing Role. Role Created!');
+          console.log('Missing Role. Role Created!');
         } catch (error) {
           await interaction.reply({
-            content: '❌ Erstellen der Rolle fehlgeschlagen. Überprüfe die permissions!',
+            content: 'Erstellen der Rolle fehlgeschlagen. Überprüfe die permissions!',
             flags: [64] // 64 -- Ephemeral
           });
           return;
@@ -56,7 +56,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       
       if (!isValid) {
         await interaction.reply({ 
-          content: '❌ Username ungültig!', 
+          content: 'Username ungültig!', 
           flags: [64] // 64 -- Ephemeral 
         });
         return;
@@ -64,7 +64,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       
       if (interaction.member.roles.cache.has(role.id)) {
         await interaction.reply({
-          content: '❌ Du hast bereits einen Account gewhitelisted',
+          content: 'Du hast bereits einen Account gewhitelisted',
           flags: [64] // 64 -- Ephemeral
         });
         return;
@@ -82,33 +82,33 @@ client.on(Events.InteractionCreate, async (interaction) => {
         console.log( response )
         if (response.toLowerCase().includes('already whitelisted')) {
           await interaction.reply({
-            content: '❌ Dieser Username ist bereits auf der Whitelist',
+            content: 'Dieser Username ist bereits auf der Whitelist',
             flags: [64] // 64 -- Ephemeral
           });
           return;
         } else if (response.toLowerCase().includes('does not exist')) {
           await interaction.reply({
-            content: '❌ User nicht gefunden!\nBist du sicher dass der Username richtig ist?',
+            content: 'User nicht gefunden!\nBist du sicher dass der Username richtig ist?',
             flags: [64] // 64 -- Ephemeral
           });
           return;
         } else if (response.toLowerCase().includes('added') && response.toLowerCase().includes('whitelist')) {
           await interaction.member.roles.add(role);
           await interaction.reply({ 
-          content: `✅ ${username} wurde zur Whitelist hinzugefügt!`, 
+          content: `${username} wurde zur Whitelist hinzugefügt!`, 
           flags: [4096] // 4096 -- Silent Message
           });
         } else {
           await interaction.reply({ 
-          content: `❌ Etwas ist schief gelaufen! Bitte Versuche es in ein paar Minuten erneut!`, 
+          content: `Etwas ist schief gelaufen! Bitte Versuche es in ein paar Minuten erneut!`, 
           flags: [64] // 64 -- Ephemeral
           });
-          console.log(`❌❌❌ Unusual RCON response \n❌❌❌ Response: ${response}`)
+          console.log(`Unusual RCON response \nResponse: ${response}`)
         }
       } catch (error) {
         console.error('RCON error:', error);
         await interaction.reply({
-          content: '❌ Verbindung zum Server fehlgeschlagen.\nVersuche es in ein paar Minuten erneut oder melde dich beim Server-Team',
+          content: 'Verbindung zum Server fehlgeschlagen.\nVersuche es in ein paar Minuten erneut oder melde dich beim Server-Team',
           flags: [64] // 64 -- Ephemeral
         });
       }
@@ -141,7 +141,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       await interaction.showModal(modal);
     } else {
       await interaction.reply({
-        content: '❌ Du hast nicht die nötige Rolle um diesen Command zu nutzen!',
+        content: 'Du hast nicht die nötige Rolle um diesen Command zu nutzen!',
         flags: [64] // 64 -- Ephemeral
       });
     }
