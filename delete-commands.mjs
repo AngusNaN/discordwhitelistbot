@@ -5,7 +5,10 @@ const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 
 const namesToDelete = new Set([
     'whitelist',
-    'drawx'
+    'drawx',
+    'checkq',
+    'printarray',
+    'startqueue',
   // add more names here
 ]);
 
