@@ -4,7 +4,8 @@ import 'dotenv/config';
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 
 const namesToDelete = new Set([
-  'whitelist',
+    'whitelist',
+    'drawx'
   // add more names here
 ]);
 
