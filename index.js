@@ -27,14 +27,17 @@ client.on(Events.MessageCreate, async (message) => {
     const text = message.content.slice(6);
     await message.reply(text);
   }
+  if (message.content === 'joe') {
+    await message.reply('mamer');
+  }
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
-  
+
   if (interaction.isModalSubmit()) {
     if (interaction.customId === 'whitelist-modal') {
       let role = interaction.guild.roles.cache.find(r => r.name === "Whitelisted");
-      
+
       if (!role) {
         try {
           role = await interaction.guild.roles.create({
@@ -53,15 +56,15 @@ client.on(Events.InteractionCreate, async (interaction) => {
       }
       const username = interaction.fields.getTextInputValue('minecraft-username');
       const isValid = /^[a-zA-Z0-9_]{3,16}$/.test(username);
-      
+
       if (!isValid) {
-        await interaction.reply({ 
-          content: 'Username ungültig!', 
-          flags: [64] // 64 -- Ephemeral 
+        await interaction.reply({
+          content: 'Username ungültig!',
+          flags: [64] // 64 -- Ephemeral
         });
         return;
       }
-      
+
       if (interaction.member.roles.cache.has(role.id)) {
         await interaction.reply({
           content: 'Du hast bereits einen Account gewhitelisted',
@@ -69,14 +72,14 @@ client.on(Events.InteractionCreate, async (interaction) => {
         });
         return;
       }
-      
+
       try {
         const rcon = await Rcon.connect({
           host: process.env.RCON_HOST,
           port: parseInt(process.env.RCON_PORT),
           password: process.env.RCON_PASSWORD
         });
-        
+
         const response = await rcon.send(`whitelist add ${username}`);
         await rcon.end();
         console.log( response )
@@ -94,13 +97,13 @@ client.on(Events.InteractionCreate, async (interaction) => {
           return;
         } else if (response.toLowerCase().includes('added') && response.toLowerCase().includes('whitelist')) {
           await interaction.member.roles.add(role);
-          await interaction.reply({ 
-          content: `${username} wurde zur Whitelist hinzugefügt!`, 
+          await interaction.reply({
+          content: `${username} wurde zur Whitelist hinzugefügt!`,
           flags: [4096] // 4096 -- Silent Message
           });
         } else {
-          await interaction.reply({ 
-          content: `Etwas ist schief gelaufen! Bitte Versuche es in ein paar Minuten erneut!`, 
+          await interaction.reply({
+          content: `Etwas ist schief gelaufen! Bitte Versuche es in ein paar Minuten erneut!`,
           flags: [64] // 64 -- Ephemeral
           });
           console.log(`Unusual RCON response \nResponse: ${response}`)
@@ -115,7 +118,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       return;
     }
   }
-  
+
   // Handle slash commands
   if (!interaction.isChatInputCommand()) {
     return;
@@ -126,7 +129,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
       const modal = new ModalBuilder()
         .setCustomId('whitelist-modal')
         .setTitle('Minecraft Whitelist');
-      
+
       const usernameInput = new TextInputBuilder()
         .setCustomId('minecraft-username')
         .setLabel('Minecraft Username')
@@ -135,7 +138,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
         .setRequired(true)
         .setMinLength(3)
         .setMaxLength(16);
-      
+
       const row = new ActionRowBuilder().addComponents(usernameInput);
       modal.addComponents(row);
       await interaction.showModal(modal);
