@@ -1,4 +1,4 @@
-const { REST, Routes } = require('discord.js');
+import { REST, Routes } from 'discord.js';
 require('dotenv').config();
 console.log('Token exists:', !!process.env.DISCORD_TOKEN);
 console.log('Client ID exists:', !!process.env.DISCORD_CLIENT_ID);
