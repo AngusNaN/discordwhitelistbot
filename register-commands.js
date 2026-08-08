@@ -1,4 +1,4 @@
-const { REST, Routes } = require('discord.js');
+const { REST, Routes } = await import('discord.js');
 require('dotenv').config();
 console.log('Token exists:', !!process.env.DISCORD_TOKEN);
 console.log('Client ID exists:', !!process.env.DISCORD_CLIENT_ID);
