@@ -1,5 +1,9 @@
-import { Client, GatewayIntentBits, Events, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, MessageFlags } from 'discord.js';
-import { Rcon } from 'rcon-client';
+import {
+    Client, GatewayIntentBits, Events
+    // ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, MessageFlags
+} from 'discord.js';
+
+// import { Rcon } from 'rcon-client';
 
 const client = new Client({
   intents: [
@@ -32,7 +36,7 @@ client.on(Events.MessageCreate, async (message) => {
   }
 });
 
-// client.on(Events.InteractionCreate, async (interaction) => {
+client.on(Events.InteractionCreate, async (interaction) => {
 
 //   if (interaction.isModalSubmit()) {
 //     if (interaction.customId === 'whitelist-modal') {
