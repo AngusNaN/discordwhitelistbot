@@ -1,5 +1,5 @@
 import { REST, Routes } from 'discord.js';
-require('dotenv').config();
+import 'dotenv/config';
 console.log('Token exists:', !!process.env.DISCORD_TOKEN);
 console.log('Client ID exists:', !!process.env.DISCORD_CLIENT_ID);
 console.log('Token first 20 chars:', process.env.DISCORD_TOKEN?.substring(0, 20));
@@ -16,8 +16,8 @@ const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
   try {
     console.log('🔄 Registering slash commands...');
 
-    await rest.put(
-      Routes.applicationCommands(process.env.DISCORD_CLIENT_ID),
+      await rest.put(
+          Routes.applicationCommands(process.env.DISCORD_CLIENT_ID),
       { body: commands },
     );
 
