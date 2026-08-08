@@ -5,8 +5,8 @@ console.log('Client ID exists:', !!process.env.DISCORD_CLIENT_ID);
 console.log('Token first 20 chars:', process.env.DISCORD_TOKEN?.substring(0, 20));
 const commands = [
   {
-    name: 'whitelist',
-    description: 'Open a whitelist Modal to enter your Username',
+    // name: 'whitelist',
+    // description: 'Open a whitelist Modal to enter your Username',
   },
 ];
 
