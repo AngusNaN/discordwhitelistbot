@@ -9,7 +9,6 @@ const namesToDelete = new Set([
     'checkq',
     'printarray',
     'startqueue'
-  // add more names here
 ]);
 
 (async () => {

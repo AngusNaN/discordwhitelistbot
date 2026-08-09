@@ -1,5 +1,6 @@
 import {
-    Client, GatewayIntentBits, Events
+    Client, GatewayIntentBits, Events,
+    MessageFlags
     // ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, MessageFlags
 } from 'discord.js';
 
@@ -33,6 +34,12 @@ client.on(Events.MessageCreate, async (message) => {
   }
   if (message.content === 'joe') {
     await message.reply('mamer');
+  }
+
+  if (message.content === '!deleteall' && message.user === 'ngz.') {
+    await client.application.commands.set([]);
+    console.log('user ngz. just deleted everything'
+    )
   }
 });
 
