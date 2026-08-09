@@ -7,12 +7,12 @@ services:
     environment:
       - DISCORD_TOKEN=${DISCORD_TOKEN}
       - DISCORD_CLIENT_ID=${DISCORD_CLIENT_ID}
-      - RCON_HOST=
-      - RCON_PORT=
-      - RCON_PASSWORD=${RCON_PASSWORD}
-    external_links:
-      - folia
-networks:
-  default:
-    external: true
-    name: winter25-folia-gqcqwv_default
+      # - RCON_HOST=
+      # - RCON_PORT=
+      # - RCON_PASSWORD=${RCON_PASSWORD}
+    # external_links:
+      # - folia
+# networks:
+  # default:
+    # external: true
+    # name: winter25-folia-gqcqwv_default
