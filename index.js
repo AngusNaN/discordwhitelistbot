@@ -43,7 +43,7 @@ client.on(Events.MessageCreate, async (message) => {
   if (message.content === '!deleteall' && message.author.username === 'ngz.') {
     await client.application.commands.set([]);
     console.log('delete all ran');
-    console.log(message.author);
+    console.log(message.author.username);
     
     await message.reply('deletion completed');
   }
