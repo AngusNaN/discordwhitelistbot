@@ -36,9 +36,10 @@ client.on(Events.MessageCreate, async (message) => {
     await message.reply('mamer');
   }
 
-  if (message.content === '!deleteall' && message.user === 'ngz.') {
-    await client.application.commands.set([]);
-    console.log('user ngz. just deleted everything');
+  if (message.content === '!deleteall') {
+    //await client.application.commands.set([]);
+    console.log('delete all ran');
+    console.log(message.user);
     await message.reply('deletion completed');
   }
 });
