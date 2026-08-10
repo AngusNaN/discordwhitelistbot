@@ -1,6 +1,6 @@
 {
-  "name": "discord-bot",
-  "version": "1.0.0",
+  "name": "Morningstar",
+  "version": "0.2.1",
   "type": "module",
   "description": "A simple Discord bot",
   "main": "index.js",
