@@ -33,20 +33,6 @@ client.on(Events.MessageCreate, async (message) => {
   if (message.content === '!ping') {
     await message.reply('Pong!');
   }
-
-  // Echo command
-  if (message.content.startsWith('!echo ')) {
-    const text = message.content.slice(6);
-    await message.reply(text);
-  }
-
-  if (message.content === '!deleteall' && message.author.username === 'ngz.') {
-    await client.application.commands.set([]);
-    console.log('delete all ran');
-    console.log(message.author.username);
-    
-    await message.reply('deletion completed');
-  }
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
