@@ -22,7 +22,7 @@ client.once(Events.ClientReady, (c) => {
     console.log(guildId);
   });
   client.user.setPresence({
-    activities: [{ name: 'Obeserving...', type: 0 }],
+    activities: [{ name: 'Thinking...', type: 0 }],
     status: 'online',
   });
   console.log(`Bot is online as ${c.user.tag}`);
