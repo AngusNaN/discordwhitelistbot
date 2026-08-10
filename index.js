@@ -1,9 +1,9 @@
+import 'dotenv/config';
 import {
-    Client, GatewayIntentBits, Events,
+    Client, GatewayIntentBits, Events, REST, Routes,
     MessageFlags
     // ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, MessageFlags
 } from 'discord.js';
-
 // import { Rcon } from 'rcon-client';
 
 const client = new Client({
@@ -13,8 +13,15 @@ const client = new Client({
     GatewayIntentBits.MessageContent,
   ],
 });
-
+const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 client.once(Events.ClientReady, (c) => {
+  const Guilds = client.guilds.cache.map(guild => guild.id);
+  const clientId = client.id
+  console.log(clientId)
+  Guilds.forEach(function(guildId) {
+    console.log(guildId);
+  });
+
   console.log(`Bot is online as ${c.user.tag}`);
 });
 

@@ -1,4 +1,4 @@
-import { REST, Routes } from 'discord.js';
+import { Client, REST, Routes } from 'discord.js';
 import 'dotenv/config';
 console.log('Token exists:', !!process.env.DISCORD_TOKEN);
 console.log('Client ID exists:', !!process.env.DISCORD_CLIENT_ID);
@@ -20,9 +20,11 @@ const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
           Routes.applicationCommands(process.env.DISCORD_CLIENT_ID),
       { body: commands },
     );
-
+    console.log(commands);
     console.log('✅ Slash commands registered successfully!');
   } catch (error) {
     console.error('❌ Error registering commands:', error);
   }
 })();
+
+
