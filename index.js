@@ -33,11 +33,11 @@ client.on(Events.MessageCreate, async (message) => {
     await message.reply(text);
   }
 
-  if (message.content === '!deleteall') {
-    //await client.application.commands.set([]);
+  if (message.content === '!deleteall' && message.author.username === 'ngz.') {
+    await client.application.commands.set([]);
     console.log('delete all ran');
-    console.log(message.user);
     console.log(message.author);
+    
     await message.reply('deletion completed');
   }
 });
