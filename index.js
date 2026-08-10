@@ -32,14 +32,12 @@ client.on(Events.MessageCreate, async (message) => {
     const text = message.content.slice(6);
     await message.reply(text);
   }
-  if (message.content === 'joe') {
-    await message.reply('mamer');
-  }
 
   if (message.content === '!deleteall') {
     //await client.application.commands.set([]);
     console.log('delete all ran');
     console.log(message.user);
+    console.log(message.author);
     await message.reply('deletion completed');
   }
 });
