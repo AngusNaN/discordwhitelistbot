@@ -1,7 +1,8 @@
 import 'dotenv/config';
 import {
     Client, GatewayIntentBits, Events, REST, Routes,
-    MessageFlags
+    MessageFlags,
+    Guild
     // ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, MessageFlags
 } from 'discord.js';
 // import { Rcon } from 'rcon-client';
@@ -13,18 +14,34 @@ const client = new Client({
     GatewayIntentBits.MessageContent,
   ],
 });
+
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 client.once(Events.ClientReady, (c) => {
   const Guilds = client.guilds.cache.map(guild => guild.id);
   const clientId = client.id
   console.log(clientId)
-  Guilds.forEach(function(guildId) {
-    console.log(guildId);
-  });
+
   client.user.setPresence({
-    activities: [{ name: 'Thinking...', type: 1 }],
+    activities: [{ name: 'Testing...', type: 1 }],
     status: 'online',
   });
+
+  async function getAppAccessToken() {
+    const res = await fetch('https://id.twitch.tv/oauth2/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: process.env.TWITCH_CLIENT_ID,
+        client_secret: process.env.TWITCH_TOKEN,
+        grant_type: 'client_credentials',
+      }),
+    });
+    console.log('Fetching token...')
+    const data = await res.json();
+    console.log('Twitch authenticated')
+    return data.access_token; //valid ~60 days
+  }
+  getAppAccessToken();
   console.log(`Bot is online as ${c.user.tag}`);
 });
 
@@ -37,6 +54,8 @@ client.on(Events.MessageCreate, async (message) => {
     await message.reply('Pong!');
   }
 });
+
+
 
 client.on(Events.InteractionCreate, async (interaction) => {
 
