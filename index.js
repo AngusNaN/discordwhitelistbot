@@ -5,7 +5,15 @@ import {
     Guild
     // ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, MessageFlags
 } from 'discord.js';
+import 'express';
+import 'axios';
+
+
+
 // import { Rcon } from 'rcon-client';
+
+const status_array = ['Waiting...', 'Lurking...', 'Sleeping...', 'Bouncing...'];
+var twitchUser = process.env.TWITCH_USER;
 
 const client = new Client({
   intents: [
@@ -15,35 +23,70 @@ const client = new Client({
   ],
 });
 
+//  Twitch
+async function getAppAccessToken() {
+  const res = await fetch('https://id.twitch.tv/oauth2/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      client_id: process.env.TWITCH_CLIENT_ID,
+      client_secret: process.env.TWITCH_TOKEN,
+      grant_type: 'client_credentials',
+    }),
+  });
+  console.log('Fetching token...')
+  const data = await res.json();
+  twitchToken = data.access_token;
+  console.log('Twitch authenticated')
+  return twitchToken; //valid ~60 days
+}
+
+var twitchToken = getAppAccessToken().then(res => console.log("[Var twitchToken] Data:", res))
+
+async function GetOnlineState() {
+    const res = await fetch(`https://api.twitch.tv/helix/streams?user_login=${twitchUser}`, {
+      headers: {
+        'Client-Id': process.env.TWITCH_CLIENT_ID,
+        'Authorization': `Bearer ${twitchToken}`
+      }
+    });
+    const data = await res.json();
+    console.log("[TwitchOnlineState] Data:", data.id);
+}
+
+var streamData = GetOnlineState().then(res=> console.log("[Var streamData] Data:", res))
+
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
+
+//  Discord
 client.once(Events.ClientReady, (c) => {
   const Guilds = client.guilds.cache.map(guild => guild.id);
-  const clientId = client.id
-  console.log(clientId)
-
-  client.user.setPresence({
-    activities: [{ name: 'Testing...', type: 1 }],
-    status: 'online',
-  });
-
-  async function getAppAccessToken() {
-    const res = await fetch('https://id.twitch.tv/oauth2/token', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        client_id: process.env.TWITCH_CLIENT_ID,
-        client_secret: process.env.TWITCH_TOKEN,
-        grant_type: 'client_credentials',
-      }),
-    });
-    console.log('Fetching token...')
-    const data = await res.json();
-    console.log('Twitch authenticated')
-    return data.access_token; //valid ~60 days
-  }
-  getAppAccessToken();
+    const clientId = client.id
+    getAppAccessToken();
   console.log(`Bot is online as ${c.user.tag}`);
+  client.user.setPresence({ activities: [{ name: 'Booting up...', type: 0 }], status: 'idle' });
+  console.log(GetOnlineState());
 });
+
+client.on('clientReady', () => {
+
+
+    setInterval(() => {
+
+      if (GetOnlineState()) {
+          console.log('true');
+          client.user.setPresence({ activities: [{ name: twitchUser + " ist Online!"}] })
+      }
+      const status = status_array[Math.floor(Math.random() * status_array.length)];
+      client.user.setPresence({ activities: [{ name: status, type: 0 }], status: 'idle' });
+      client.user.setStatus('idle');
+      console.log(`Status changed to ${status}`);
+    }, 2000);
+});
+
+
+
+
 
 client.on(Events.MessageCreate, async (message) => {
   // Ignore messages from bots
@@ -51,11 +94,11 @@ client.on(Events.MessageCreate, async (message) => {
 
   // Simple ping command
   if (message.content === '!ping') {
-    await message.reply('Pong!');
+      await message.reply('Pong!');
+      console.log(twitchToken)
   }
 });
-
-
+//client.user.setPresence({activities: [{ name: 'Testing...', type: 0 }], status: 'idle' });
 
 client.on(Events.InteractionCreate, async (interaction) => {
 
