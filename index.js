@@ -72,7 +72,8 @@ client.on('clientReady', () => {
     if (streamData) {
       console.log('true');
         client.user.setPresence({
-          activities: [{ name:`${streamData.user_name} - ${streamData.game_name}`, type: 1, url: 'https://twitch.tv/jessydelua'
+            activities: [{
+                name: `${streamData.user_name} - ${streamData.game_name}`, type: 1, url: `https://twitch.tv/${streamData.user_login}`
             }], status: 'web'
         })
       return;
