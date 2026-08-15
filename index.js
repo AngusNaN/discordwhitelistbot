@@ -1,16 +1,7 @@
 import 'dotenv/config';
-import {
-    Client, GatewayIntentBits, Events, REST, Routes,
-    MessageFlags,
-    Guild
-    // ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, MessageFlags
-} from 'discord.js';
+import {Client, GatewayIntentBits, Events, REST} from 'discord.js';
 import 'express';
 import 'axios';
-
-
-
-// import { Rcon } from 'rcon-client';
 
 const status_array = ['Waiting...', 'Lurking...', 'Sleeping...', 'Bouncing...'];
 var twitchUser = process.env.TWITCH_USER;
@@ -25,6 +16,7 @@ const client = new Client({
 
 //  Twitch
 async function getAppAccessToken() {
+  console.log('Fetching token...')
   const res = await fetch('https://id.twitch.tv/oauth2/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -34,14 +26,13 @@ async function getAppAccessToken() {
       grant_type: 'client_credentials',
     }),
   });
-  console.log('Fetching token...')
   const data = await res.json();
   twitchToken = data.access_token;
   console.log('Twitch authenticated')
   return twitchToken; //valid ~60 days
 }
-
-var twitchToken = getAppAccessToken().then(res => console.log("[Var twitchToken] Data:", res))
+var twitchToken = await getAppAccessToken();
+console.log(twitchToken)
 
 async function GetOnlineState() {
     const res = await fetch(`https://api.twitch.tv/helix/streams?user_login=${twitchUser}`, {
@@ -51,42 +42,49 @@ async function GetOnlineState() {
       }
     });
     const data = await res.json();
-    console.log("[TwitchOnlineState] Data:", data.id);
+    const streamData = data.data;
+
+    if (!streamData || streamData.length === 0) {
+        return null;
+    }
+    return streamData[0];
 }
 
-var streamData = GetOnlineState().then(res=> console.log("[Var streamData] Data:", res))
+var streamData = await GetOnlineState();
+console.log(streamData);
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
-
 //  Discord
 client.once(Events.ClientReady, (c) => {
   const Guilds = client.guilds.cache.map(guild => guild.id);
     const clientId = client.id
-    getAppAccessToken();
   console.log(`Bot is online as ${c.user.tag}`);
   client.user.setPresence({ activities: [{ name: 'Booting up...', type: 0 }], status: 'idle' });
-  console.log(GetOnlineState());
 });
 
 client.on('clientReady', () => {
 
 
-    setInterval(() => {
+  setInterval(async() => {
+      console.log("Checking...")
+      const streamData = await GetOnlineState();
 
-      if (GetOnlineState()) {
-          console.log('true');
-          client.user.setPresence({ activities: [{ name: twitchUser + " ist Online!"}] })
-      }
-      const status = status_array[Math.floor(Math.random() * status_array.length)];
-      client.user.setPresence({ activities: [{ name: status, type: 0 }], status: 'idle' });
-      client.user.setStatus('idle');
-      console.log(`Status changed to ${status}`);
-    }, 2000);
+    if (streamData) {
+      console.log('true');
+        client.user.setPresence({
+          activities: [{ name:`${streamData.user_name} - ${streamData.game_name}`, type: 1, url: 'https://twitch.tv/jessydelua'
+            }], status: 'web'
+        })
+      return;
+    } else {
+      console.log(`${twitchUser} ist offline`)
+    }
+    const status = status_array[Math.floor(Math.random() * status_array.length)];
+    client.user.setPresence({ activities: [{ name: status, type: 0 }], status: 'idle' });
+    client.user.setStatus('idle');
+    console.log(`Status changed to ${status}`);
+  }, 30000);
 });
-
-
-
-
 
 client.on(Events.MessageCreate, async (message) => {
   // Ignore messages from bots
@@ -98,7 +96,6 @@ client.on(Events.MessageCreate, async (message) => {
       console.log(twitchToken)
   }
 });
-//client.user.setPresence({activities: [{ name: 'Testing...', type: 0 }], status: 'idle' });
 
 client.on(Events.InteractionCreate, async (interaction) => {
 
